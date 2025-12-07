@@ -1,0 +1,53 @@
+# File: .github/workflows/workflow.yml
+
+on: [push]
+
+name: Cleanup examples for Multiple Azure Login
+
+jobs:
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+    # enable cleanup for the 1st Azure Login
+    - name: Azure Login
+      uses: azure/login@v2
+      env:
+        AZURE_LOGIN_PRE_CLEANUP: true
+        AZURE_LOGIN_POST_CLEANUP: true
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        enable-AzPSSession: true    
+
+    # run some actions
+
+    # disable cleanup for all other Azure Login
+    - name: Azure Login 2
+      uses: azure/login@v2
+      env:
+        AZURE_LOGIN_PRE_CLEANUP: false
+        AZURE_LOGIN_POST_CLEANUP: false
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID_2 }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID_2 }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_2 }}
+        enable-AzPSSession: true   
+
+    # run other actions
+
+    # disable cleanup for all other Azure Login
+    - name: Azure Login 3
+      uses: azure/login@v2
+      env:
+        AZURE_LOGIN_PRE_CLEANUP: false
+        AZURE_LOGIN_POST_CLEANUP: false
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID_3 }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID_3 }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID_3 }}
+        enable-AzPSSession: true   
+
+    # run other actions
